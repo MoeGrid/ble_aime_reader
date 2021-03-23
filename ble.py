@@ -24,7 +24,7 @@ _UART_SERVICE = (
 
 
 class BleUtil:
-    def __init__(self, name="demo", rxbuf=64):
+    def __init__(self, name="ble", rxbuf=64):
         self._name = name
 
         self._ble = bluetooth.BLE()
@@ -64,7 +64,6 @@ class BleUtil:
             conn_handle, _, _ = data
             if conn_handle in self._connections:
                 self._connections.remove(conn_handle)
-            # 再次开始广播以允许新连接
             self._advertise()
         elif event == _IRQ_GATTS_WRITE:
             conn_handle, value_handle = data
@@ -87,13 +86,3 @@ class BleUtil:
 
     def _advertise(self, interval_us=500000):
         self._ble.gap_advertise(interval_us, adv_data=self._payload)
-
-
-if __name__ == "__main__":
-    ble = BleUtil()
-
-    def on_data():
-        print("rx: ", ble.read())  # .decode().strip()
-
-    ble.irq(handler=on_data)
-    ble.close()
