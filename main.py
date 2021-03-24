@@ -7,14 +7,14 @@ from machine import UART, Timer, Pin
 
 ble = BleUtil(name='aime-reader')
 reader = AimeReader(2, 38400)
-p15 = Pin(15, Pin.OUT)
+p13 = Pin(13, Pin.OUT)
 
 def insert_coins(num):
     print('Insert coins.')
     for i in range(num):
-        p15.on()
+        p13.on()
         time.sleep_ms(150)
-        p15.off()
+        p13.off()
         time.sleep_ms(150)
 
 
@@ -22,7 +22,6 @@ def handle_ble():
     data = ble.read()
     if not data or data[0] not in (0xA1, 0xA2):
         return
-    print(data)
     # swipe
     if data[0] == 0xA1:
         p = data[1]
